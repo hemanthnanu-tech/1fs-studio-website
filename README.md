@@ -1,59 +1,58 @@
-# 1FS Studio & Rental
+# 1FS Photography & Rentals
 
-Welcome to the **1FS Studio & Rental** platform! This is a modern, premium web application built for a photography studio and camera rental business. It features a beautiful UI, smooth animations, and a functional booking & admin system.
+A premium, sleek, and high-end studio website built with React, Vite, and Tailwind CSS. Featuring a "Gallery Monochrome" theme designed to highlight stunning photography.
 
-## 🚀 Tech Stack
+## Features
+- **Premium UI/UX:** Ultra-sleek monochrome palette with elegant typography.
+- **Photoshoot Packages:** Browse and select premium packages.
+- **Camera Rentals:** Live cart system for renting high-end cameras and gear.
+- **Booking Calendar:** Interactive UI for booking dates.
+- **WhatsApp Integration:** Direct booking and rental checkout via WhatsApp.
+- **Admin Dashboard:** Manage bookings, rentals, and gear fleet.
 
-- **Framework:** [React 19](https://react.dev/) + [Vite](https://vitejs.dev/)
-- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
-- **Animations:** [Framer Motion](https://www.framer.com/motion/)
-- **Icons:** [Lucide React](https://lucide.dev/)
-- **State Management:** React Hooks + LocalStorage
-- **Language:** TypeScript
+## How to Run Locally
 
-## 📸 Key Features
-
-- **Dynamic Theme:** Beautifully crafted Light and Dark modes with specialized color palettes (Orinoco flow design system).
-- **Immersive UX:** High-end 3D tilt effects, smooth scrolling, and micro-animations throughout the user journey.
-- **Photoshoot Packages:** A stunning cinematic gallery to browse and book 4 premium shoot categories (Baby, Automotive, Traditional, Pre-Wedding).
-- **Camera Rentals:** An inventory system for daily camera gear leasing with search and filtering.
-- **Admin Gateway:** A hidden secure panel (default login: `hemi` / `hemi`) to manage bookings, track revenue, block calendar dates, copy formatted receipts, and update gear availability.
-- **Live Calendar System:** Bookings automatically block dates on the integrated calendar so customers cannot double-book.
-
-## 💻 How to Run Locally
-
-1. **Install Dependencies:**
-   Make sure you have Node.js installed, then run:
+1. Open your terminal in this project directory.
+2. Install dependencies:
    ```bash
    npm install
    ```
-
-2. **Start the Development Server:**
+3. Start the development server (we use a special command for Windows path compatibility):
    ```bash
-   npm run dev
+   node node_modules/vite/bin/vite.js dev
    ```
-   *Note: If you are on Windows and encounter path errors, the scripts in `package.json` have been configured to use the `node` execution path to bypass `&` symbol parsing issues.*
+4. Open the provided `localhost` link in your browser.
 
-3. **Open the App:**
-   Open your browser to the local URL provided in the terminal (usually `http://localhost:3000` or `http://localhost:5173`).
+## How to Publish to GitHub Pages (Live Website)
 
-## 🌐 How to Publish to GitHub Pages
+This project is pre-configured with a GitHub Action (`.github/workflows/deploy.yml`) to automatically build and deploy your website to GitHub Pages!
 
-1. **Initialize Git & Push to GitHub:**
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-   git push -u origin main
-   ```
+**Follow these exact steps:**
 
-2. **Enable GitHub Actions:**
-   - Go to your repository settings on GitHub.
-   - Select **Pages** from the sidebar.
-   - Under **Build and deployment**, set the **Source** to **GitHub Actions**.
-   - The pre-configured `.github/workflows/deploy.yml` will automatically build and publish your site!
+1. **Create a GitHub Repository:**
+   - Go to [GitHub.com](https://github.com) and click **New Repository**.
+   - Name it (e.g., `1fs-photography`). Do **NOT** initialize with a README, .gitignore, or license.
+   - Click **Create repository**.
+
+2. **Push Your Code:**
+   - Open your terminal in this project folder.
+   - Run these commands, replacing `<YOUR_GITHUB_USERNAME>` and `<YOUR_REPO_NAME>` with your actual details:
+     ```bash
+     git remote add origin https://github.com/<YOUR_GITHUB_USERNAME>/<YOUR_REPO_NAME>.git
+     git branch -M main
+     git push -u origin main
+     ```
+
+3. **Enable GitHub Pages:**
+   - Go to your repository on GitHub.
+   - Click on the **Settings** tab.
+   - In the left sidebar, click on **Pages**.
+   - Under "Build and deployment", change the Source to **GitHub Actions**.
+   - GitHub will automatically detect your `deploy.yml` file and start building your website!
+
+4. **View Your Live Site!**
+   - Click the **Actions** tab to watch the build finish.
+   - Once it turns green, your website is live! The URL will be provided in the action summary (usually `https://<YOUR_USERNAME>.github.io/<YOUR_REPO_NAME>/`).
 
 ---
-*Designed and Developed for Darshan B — 1FS Photography.*
+*Designed with precision for 1FS Studio.*
