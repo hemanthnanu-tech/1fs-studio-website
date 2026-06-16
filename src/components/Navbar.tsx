@@ -159,7 +159,13 @@ export function Navbar({ onAdminClick, bookingsCount, isLight, onToggleTheme }: 
                 <a
                   key={link.href}
                   href={link.href}
-                  onClick={() => setMobileOpen(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setMobileOpen(false);
+                    setTimeout(() => {
+                      document.getElementById(link.href.slice(1))?.scrollIntoView({ behavior: 'smooth' });
+                    }, 100);
+                  }}
                   className={`flex items-center gap-2.5 py-3 px-4 rounded-xl text-sm font-mono transition-all ${
                     isLight
                       ? "text-[#171717] hover:bg-[#FAFAFA] hover:text-[#52525B]"

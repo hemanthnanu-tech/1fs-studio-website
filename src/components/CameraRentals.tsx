@@ -6,9 +6,9 @@ import { motion } from "motion/react";
 
 interface CameraRentalsProps {
   items: RentalItem[];
-  onAddToCart: (item: RentalItem) => void;
   isLight: boolean;
-  onProductClick?: (gallery: string[]) => void;
+  onAddToCart: (items: RentalItem[]) => void;
+  onProductClick?: (images: string[]) => void;
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -16,8 +16,9 @@ const CATEGORY_COLORS: Record<string, string> = {
   Stabilizer: "text-[#71717A]",
 };
 
-export function CameraRentals({ items, onAddToCart, isLight, onProductClick }: CameraRentalsProps) {
+export function CameraRentals({ items, isLight, onAddToCart, onProductClick }: CameraRentalsProps) {
   const [categoryFilter, setCategoryFilter] = useState<string>("All");
+  const [cart, setCart] = useState<RentalItem[]>([]);
 
   const border = isLight ? "border-[#E4E4E7]" : "border-[#52525B]/12";
   const subCls = isLight ? "text-[#71717A]" : "text-[#A1A1AA]";
@@ -201,19 +202,27 @@ export function CameraRentals({ items, onAddToCart, isLight, onProductClick }: C
                   {/* Rent CTA */}
                   <div className="mt-6 pt-2">
                     <button 
-                      onClick={() => onAddToCart(item)}
+                      onClick={() => {
+                        if (cart.some(i => i.id === item.id)) {
+                          setCart(cart.filter(i => i.id !== item.id));
+                        } else {
+                          setCart([...cart, item]);
+                        }
+                      }}
                       disabled={!item.availability}
                       className={`w-full py-2.5 px-4 rounded-xl text-xs font-mono uppercase tracking-wider font-bold transition-all border flex items-center justify-center gap-2 ${
-                        item.availability
-                          ? (isLight ? "bg-[#171717] text-white border-transparent hover:bg-black" : "bg-white text-black border-transparent hover:bg-gray-200")
-                          : (isLight
-                              ? "bg-[#FAFAFA] text-[#B0C4D8] border-[#E4E4E7] cursor-not-allowed"
-                              : "bg-[#18181B] text-[#52525B] border-[#52525B]/8 cursor-not-allowed")
+                        !item.availability
+                          ? (isLight ? "bg-[#FAFAFA] text-[#B0C4D8] border-[#E4E4E7] cursor-not-allowed" : "bg-[#18181B] text-[#52525B] border-[#52525B]/8 cursor-not-allowed")
+                          : cart.some(i => i.id === item.id)
+                            ? "bg-green-600 text-white border-green-600 hover:bg-green-700"
+                            : (isLight ? "bg-[#171717] text-white border-transparent hover:bg-black" : "bg-white text-black border-transparent hover:bg-gray-200")
                       }`}
                     >
-                      {item.availability ? (
-                        <>Add to Cart <ShoppingCart className="w-3.5 h-3.5" /></>
-                      ) : "Out of Stock"}
+                      {!item.availability ? "Out of Stock" : cart.some(i => i.id === item.id) ? (
+                        <>Selected <Check className="w-3.5 h-3.5" /></>
+                      ) : (
+                        <>Select <ShoppingCart className="w-3.5 h-3.5" /></>
+                      )}
                     </button>
                   </div>
 
@@ -224,6 +233,34 @@ export function CameraRentals({ items, onAddToCart, isLight, onProductClick }: C
         </div>
 
       </div>
+
+      {/* Floating Cart Button */}
+      <AnimatePresence>
+        {cart.length > 0 && (
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-sm"
+          >
+            <button
+              onClick={() => {
+                onAddToCart(cart);
+                setCart([]);
+              }}
+              className="w-full bg-[#E1306C] hover:bg-[#C1205C] text-white py-3.5 px-6 rounded-2xl shadow-2xl shadow-[#E1306C]/20 flex items-center justify-between font-bold transition-colors border border-white/20"
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs">
+                  {cart.length}
+                </div>
+                <span>Book Selected Items</span>
+              </div>
+              <span>₹{cart.reduce((sum, item) => sum + item.pricePerDay, 0)}/day</span>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

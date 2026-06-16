@@ -6,9 +6,12 @@ import { motion, AnimatePresence } from "motion/react";
 
 interface BookingCalendarProps {
   selectedItem: {
-    type: "rental" | "photoshoot";
-    item: RentalItem | PhotoshootCategory;
-    priceOption?: PriceOption;
+    type: "photoshoot";
+    item: PhotoshootCategory;
+    priceOption: PriceOption;
+  } | {
+    type: "rental";
+    items: RentalItem[];
   } | null;
   blockedDates: string[];
   onNewBookingAdded: (data: {
@@ -22,7 +25,10 @@ interface BookingCalendarProps {
 
 export function BookingCalendar({ selectedItem, blockedDates, onNewBookingAdded, onClose, isLight }: BookingCalendarProps) {
   if (!selectedItem) return null;
-  const { type, item, priceOption } = selectedItem;
+  const type = selectedItem.type;
+  const isRental = type === "rental";
+  const itemName = isRental ? (selectedItem as any).items.map((i: any) => i.name).join(" + ") : (selectedItem as any).item.name;
+  const priceOption = isRental ? null : (selectedItem as any).priceOption;
 
   const today = new Date();
   const [currentYear, setCurrentYear]   = useState(today.getFullYear());
@@ -88,8 +94,8 @@ export function BookingCalendar({ selectedItem, blockedDates, onNewBookingAdded,
     ? Math.ceil(Math.abs(new Date(endDateStr).getTime() - new Date(startDateStr).getTime()) / 86400000) + 1
     : 1;
 
-  const basePrice = type === "rental"
-    ? (item as RentalItem).pricePerDay * duration
+  const basePrice = isRental
+    ? (selectedItem as any).items.reduce((sum: number, i: any) => sum + i.pricePerDay, 0) * duration
     : (priceOption?.price ?? 3999);
 
   const totalPrice = couponApplied ? Math.max(0, basePrice - 100) : basePrice;
@@ -100,7 +106,7 @@ export function BookingCalendar({ selectedItem, blockedDates, onNewBookingAdded,
     }
     const dateRange = startDateStr === endDateStr ? `on ${startDateStr}` : `from ${startDateStr} to ${endDateStr} (${duration} days)`;
     const slotText  = type === "photoshoot" ? `\n🕒 Time Slot: ${selectedSlot}` : "";
-    const msg = `*✨ 1FS Photography Booking ✨*\n\nHello ${STUDIO_STATISTICS.photographerName} (1FS Team),\n\n📅 *Booking Details:*\n• Name: ${clientName}\n• Phone: ${clientPhone}\n• Email: ${clientEmail}\n• Service: ${type === "rental" ? "Camera Rental" : "Photoshoot"}\n• Package: ${item.name}${priceOption ? ` [${priceOption.label}]` : ""}\n• Date(s): ${dateRange}${slotText}\n• Total: ₹${totalPrice.toLocaleString("en-IN")}${couponApplied ? " (Includes ₹100 Off Coupon)" : ""}\n• Notes: ${notes || "None"}\n\nPlease confirm availability. Thank you! 📸`;
+    const msg = `*✨ 1FS Photography Booking ✨*\n\nHello ${STUDIO_STATISTICS.photographerName} (1FS Team),\n\n📅 *Booking Details:*\n• Name: ${clientName}\n• Phone: ${clientPhone}\n• Email: ${clientEmail}\n• Service: ${isRental ? "Camera Rental" : "Photoshoot"}\n• Package: ${itemName}${priceOption ? ` [${priceOption.label}]` : ""}\n• Date(s): ${dateRange}${slotText}\n• Total: ₹${totalPrice.toLocaleString("en-IN")}${couponApplied ? " (Includes ₹100 Off Coupon)" : ""}\n• Notes: ${notes || "None"}\n\nPlease confirm availability. Thank you! 📸`;
     window.open(`https://wa.me/${STUDIO_STATISTICS.whatsappNum}?text=${encodeURIComponent(msg)}`, "_blank");
   };
 
@@ -112,7 +118,7 @@ export function BookingCalendar({ selectedItem, blockedDates, onNewBookingAdded,
     }
     setErrorMsg("");
     setSubmitting(true);
-    const name = type === "rental" ? item.name : `${item.name} (${priceOption?.label})`;
+    const name = isRental ? itemName : `${itemName} (${priceOption?.label})`;
     setTimeout(() => {
       onNewBookingAdded({ customerName: clientName, customerPhone: clientPhone, customerEmail: clientEmail, type, selectedItemName: name, pricePaid: totalPrice, startDate: startDateStr, endDate: endDateStr, timeSlot: type==="photoshoot" ? selectedSlot : "Full Day", notes });
       setSubmitting(false);
@@ -200,7 +206,7 @@ export function BookingCalendar({ selectedItem, blockedDates, onNewBookingAdded,
                 {type === "rental" ? "Camera Rental Booking" : "Photoshoot Reservation"}
               </span>
               <h2 className={`text-lg sm:text-xl font-serif font-bold ${headText}`}>
-                {type === "rental" ? "Rent" : "Book"}: {item.name}
+                {isRental ? "Rent" : "Book"}: {itemName}
               </h2>
             </div>
             <button id="booking-close-btn" onClick={onClose}
@@ -426,7 +432,7 @@ export function BookingCalendar({ selectedItem, blockedDates, onNewBookingAdded,
                   }`}>
                     <div className={`flex justify-between items-center text-xs mb-1 ${subText}`}>
                       <span>Rate:</span>
-                      <span>{type==="rental" ? `₹${(item as RentalItem).pricePerDay}/day` : priceOption?.label}</span>
+                      <span>{isRental ? `₹${(selectedItem as any).items.reduce((s:number, i:any) => s + i.pricePerDay, 0)}/day` : priceOption?.label}</span>
                     </div>
                     {type==="rental" && duration>1 && (
                       <div className={`flex justify-between items-center text-xs mb-1 ${subText}`}>

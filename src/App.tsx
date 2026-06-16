@@ -129,11 +129,13 @@ export default function App() {
 
   // ── Booking modal ──
   const [selectedBookingItem, setSelectedBookingItem] = useState<{
-    type: "rental" | "photoshoot";
-    item: RentalItem | PhotoshootCategory;
-    priceOption?: PriceOption;
+    type: "photoshoot";
+    item: PhotoshootCategory;
+    priceOption: PriceOption;
+  } | {
+    type: "rental";
+    items: RentalItem[];
   } | null>(null);
-
   const [cartItems, setCartItems] = useState<RentalItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -198,8 +200,8 @@ export default function App() {
     setBookings(prev => [record, ...prev]);
   };
 
-  const handleRentClick = (item: RentalItem) =>
-    setSelectedBookingItem({ type: "rental", item });
+  const handleRentClick = (items: RentalItem[]) =>
+    setSelectedBookingItem({ type: "rental", items });
 
   const handlePhotoshootOptionClick = (category: PhotoshootCategory, priceOption: PriceOption) =>
     setSelectedBookingItem({ type: "photoshoot", item: category, priceOption });
