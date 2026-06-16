@@ -309,7 +309,7 @@ export default function App() {
                 <div className="space-y-3 sm:space-y-4">
                   {[
                     { src: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=600", label: "Baby Theme Shoots", tag: "Creative" },
-                    { src: "https://images.unsplash.com/photo-1542362567-b07eac790947?auto=format&fit=crop&q=80&w=600", label: "Car & Bike Reveals", tag: "Automotive", aspect: "3/4" }
+                    { src: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=600", label: "Car & Bike Reveals", tag: "Automotive", aspect: "3/4" }
                   ].map(({ src, label, tag, aspect = "1/1" }, i) => (
                     <motion.div key={i}
                       initial={{ opacity: 0, y: 25 }}

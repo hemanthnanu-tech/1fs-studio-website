@@ -99,7 +99,7 @@ export function PhotoshootPackages({ categories, onBookPackageClick, isLight }: 
           <span className={`text-[10px] uppercase tracking-widest font-mono font-bold flex items-center justify-center gap-2 mb-3 ${isLight ? "text-[#171717]" : "text-white"}`}>
             <span className={`w-6 h-px ${isLight ? "bg-[#171717]" : "bg-white"}`} />
             <Sparkles className="w-3 h-3" />
-            <span className="font-signature capitalize text-2xl tracking-normal font-normal">1FS Photography</span>
+            <span className="font-serif italic capitalize text-2xl tracking-normal font-semibold">1FS Photography</span>
             <span className={`w-6 h-px ${isLight ? "bg-[#171717]" : "bg-white"}`} />
           </span>
           <h2 className={`text-4xl sm:text-5xl md:text-6xl font-serif font-black leading-tight mb-4 ${headingCls}`}>
