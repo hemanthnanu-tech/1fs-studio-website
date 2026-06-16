@@ -119,31 +119,34 @@ export function PhotoshootPackages({ categories, onBookPackageClick, isLight }: 
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
                 onClick={() => setSelectedCategory(cat)}
-                className="relative group cursor-pointer overflow-hidden rounded-3xl aspect-[4/3] sm:aspect-video md:aspect-[4/3] lg:aspect-[16/10] shadow-xl"
+                className="relative group cursor-pointer overflow-hidden rounded-3xl shadow-xl flex flex-col sm:block h-auto sm:aspect-video md:aspect-[4/3] lg:aspect-[16/10] bg-[#18181B]"
               >
-                {/* Background Image */}
-                <img 
-                  src={style.bgImage} 
-                  alt={cat.name} 
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                />
+                {/* Image Section (Top on mobile, Absolute fill on desktop) */}
+                <div className="relative w-full aspect-[4/3] sm:absolute sm:inset-0 sm:h-full">
+                  <img 
+                    src={style.bgImage} 
+                    alt={cat.name} 
+                    className="absolute inset-0 w-full h-full object-cover sm:object-cover sm:transition-transform sm:duration-1000 sm:group-hover:scale-110"
+                  />
+                  {/* Gradient only on desktop to make text readable */}
+                  <div className="hidden sm:block absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 group-hover:via-black/50 transition-colors duration-500" />
+                </div>
                 
-                {/* Dark Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 group-hover:via-black/50 transition-colors duration-500" />
-                
-                {/* Content */}
-                <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end">
-                  <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                {/* Content Section (Bottom block on mobile, Absolute bottom on desktop) */}
+                <div className="relative sm:absolute sm:inset-0 p-6 sm:p-8 flex flex-col justify-end z-10 sm:bg-transparent bg-gradient-to-t from-[#09090B] to-[#18181B] border-t sm:border-0 border-[#52525B]/20">
+                  <div className="transform sm:translate-y-4 sm:group-hover:translate-y-0 transition-transform duration-500 ease-out">
                     <div 
-                      className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-md border border-white/20"
-                      style={{ backgroundColor: `${style.color}40` }} // 40 is hex for 25% opacity
+                      className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-md sm:border border-white/20"
+                      style={{ backgroundColor: `${style.color}40` }}
                     >
                       {renderIcon(cat.icon, "w-6 h-6 text-white")}
                     </div>
-                    <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-2 leading-tight">
+                    
+                    <h3 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-white mb-2 leading-tight">
                       {cat.name}
                     </h3>
-                    <p className="text-white/80 text-xs sm:text-sm line-clamp-2 max-w-md">
+                    
+                    <p className="text-[#A1A1AA] text-xs sm:text-sm line-clamp-2 max-w-sm font-light">
                       {cat.description}
                     </p>
                     

@@ -77,21 +77,14 @@ export function SocialFooter({ isLight }: SocialFooterProps) {
                 href="https://instagram.com/_.hemxnth__"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`relative self-start overflow-hidden inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-mono transition-all duration-500 group hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(225,48,108,0.25)] active:scale-95 border ${
+                className={`relative self-start overflow-hidden inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[10px] sm:text-xs font-mono transition-all duration-300 group active:scale-95 border ${
                   isLight
-                    ? "bg-[#FAFAFA] border-[#E4E4E7] text-[#171717]"
-                    : "bg-[#09090B] border-[#52525B]/20 text-[#FAFAFA]"
+                    ? "bg-[#FAFAFA] border-[#E4E4E7] text-[#171717] hover:border-[#E1306C]/50"
+                    : "bg-[#09090B] border-[#52525B]/20 text-[#FAFAFA] hover:border-[#E1306C]/50"
                 }`}
               >
-                {/* Premium Instagram Gradient Background (Fades in) */}
-                <div className="absolute inset-0 bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] opacity-0 group-hover:opacity-[0.12] transition-opacity duration-500" />
-                
-                {/* Glare/Shine line moving across on hover */}
-                <div className="absolute top-0 bottom-0 left-0 w-[40%] bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[150%] group-hover:translate-x-[300%] transition-transform duration-1000 ease-in-out skew-x-12" />
-
-                <Instagram className="w-4 h-4 text-[#E1306C] group-hover:scale-110 transition-all duration-500 relative z-10" />
+                <Instagram className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#E1306C] group-hover:scale-110 transition-all duration-300 relative z-10" />
                 <span className="font-bold tracking-wider relative z-10">@_.hemxnth__ (Dev)</span>
-                <Sparkles className="w-3.5 h-3.5 text-[#fcb045] opacity-0 group-hover:opacity-100 transition-all duration-500 relative z-10 scale-50 group-hover:scale-100" />
               </a>
             </div>
           </motion.div>
