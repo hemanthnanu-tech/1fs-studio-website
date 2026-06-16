@@ -13,7 +13,7 @@ interface PhotoshootPackagesProps {
 // Minimalist flat styling. No gradients.
 const CATEGORY_STYLES: Record<string, { bgImage: string; color: string; colorLight: string; modalLight: string; modalDark: string; btnClassLight: string; btnClassDark: string }> = {
   "baby-shoot": {
-    bgImage: "/package/Baby_Shoot_Baby_Shower.png",
+    bgImage: "package/Baby_Shoot_Baby_Shower.png",
     color: "#171717",
     colorLight: "#E4E4E7",
     modalLight: "bg-white border-black/10",
@@ -22,7 +22,7 @@ const CATEGORY_STYLES: Record<string, { bgImage: string; color: string; colorLig
     btnClassDark: "bg-white text-black hover:bg-gray-200",
   },
   "car-bike": {
-    bgImage: "/package/Car_Bike_Delivery.png",
+    bgImage: "package/Car_Bike_Delivery.png",
     color: "#171717",
     colorLight: "#E4E4E7",
     modalLight: "bg-white border-black/10",
@@ -31,7 +31,7 @@ const CATEGORY_STYLES: Record<string, { bgImage: string; color: string; colorLig
     btnClassDark: "bg-white text-black hover:bg-gray-200",
   },
   "traditional-house": {
-    bgImage: "/package/Traditional_House_Warming.png",
+    bgImage: "package/Traditional_House_Warming.png",
     color: "#171717",
     colorLight: "#E4E4E7",
     modalLight: "bg-white border-black/10",
@@ -40,7 +40,7 @@ const CATEGORY_STYLES: Record<string, { bgImage: string; color: string; colorLig
     btnClassDark: "bg-white text-black hover:bg-gray-200",
   },
   "pre-wedding": {
-    bgImage: "/package/Pre_Wedding.png",
+    bgImage: "package/Pre_Wedding.png",
     color: "#171717",
     colorLight: "#E4E4E7",
     modalLight: "bg-white border-black/10",
@@ -66,9 +66,6 @@ export function PhotoshootPackages({ categories, onBookPackageClick, isLight }: 
       default:      return <Sparkles className={className} />;
     }
   };
-
-  const isPremium = (label: string) =>
-    label.toLowerCase().includes("premium") || label.toLowerCase().includes("luxury");
 
   // Close modal when clicking escape
   React.useEffect(() => {
@@ -220,7 +217,8 @@ export function PhotoshootPackages({ categories, onBookPackageClick, isLight }: 
                   selectedCategory.prices.length >= 3 ? "xl:grid-cols-3" : ""
                 }`}>
                   {selectedCategory.prices.map((option, i) => {
-                    const premium = isPremium(option.label);
+                    const maxPrice = Math.max(...selectedCategory.prices.map(p => p.price));
+                    const premium = option.price === maxPrice;
                     return (
                       <ThreeDCard key={i} isLight={isLight} className={`h-full ${premium ? (isLight ? "bg-amber-50/30 border-amber-200" : "bg-amber-900/10 border-amber-500/30") : ""}`} glowColor={premium ? "rgba(251,191,36,0.4)" : "rgba(14,107,168,0.2)"}>
                         <div className="flex flex-col h-full justify-between p-1">

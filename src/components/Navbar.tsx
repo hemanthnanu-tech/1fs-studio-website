@@ -105,18 +105,6 @@ export function Navbar({ onAdminClick, bookingsCount, isLight, onToggleTheme }: 
             </AnimatePresence>
           </button>
 
-          {/* Pending badge */}
-          {bookingsCount > 0 && (
-            <div className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[10px] font-mono uppercase font-bold border ${
-              isLight
-                ? "bg-[#52525B]/8 border-[#52525B]/20 text-[#52525B]"
-                : "bg-[#52525B]/10 border-[#52525B]/25 text-[#A1A1AA]"
-            }`}>
-              <span className="w-1.5 h-1.5 bg-[#71717A] rounded-full animate-ping" />
-              {bookingsCount} Active
-            </div>
-          )}
-
           {/* Admin */}
           <button
             id="admin-gateway-btn"
