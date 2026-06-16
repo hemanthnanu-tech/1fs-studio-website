@@ -75,7 +75,7 @@ export function SocialFooter({ isLight }: SocialFooterProps) {
 
             <div className="flex flex-col gap-2 mt-2">
               <a
-                href={`https://instagram.com/${STUDIO_STATISTICS.instagramHandle}`}
+                href="https://wa.me/919538520031"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`relative self-start overflow-hidden inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-mono transition-all duration-500 group hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(225,48,108,0.25)] active:scale-95 border ${
@@ -91,7 +91,7 @@ export function SocialFooter({ isLight }: SocialFooterProps) {
                 <div className="absolute top-0 bottom-0 left-0 w-[40%] bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[150%] group-hover:translate-x-[300%] transition-transform duration-1000 ease-in-out skew-x-12" />
 
                 <Instagram className="w-4 h-4 text-[#E1306C] group-hover:scale-110 transition-all duration-500 relative z-10" />
-                <span className="font-bold tracking-wider relative z-10">@_.hemxnth__ (Dev)</span>
+                <span className="font-bold tracking-wider relative z-10">9538520031 (Dev)</span>
                 <Sparkles className="w-3.5 h-3.5 text-[#fcb045] opacity-0 group-hover:opacity-100 transition-all duration-500 relative z-10 scale-50 group-hover:scale-100" />
               </a>
             </div>

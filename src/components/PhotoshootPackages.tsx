@@ -31,7 +31,7 @@ const CATEGORY_STYLES: Record<string, { bgImage: string; color: string; colorLig
     btnClassDark: "bg-white text-black hover:bg-gray-200",
   },
   "traditional-house": {
-    bgImage: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&q=80&w=1000",
+    bgImage: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&q=80&w=1000",
     color: "#171717",
     colorLight: "#E4E4E7",
     modalLight: "bg-white border-black/10",

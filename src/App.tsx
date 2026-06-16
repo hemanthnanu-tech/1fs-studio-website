@@ -292,7 +292,7 @@ export default function App() {
                       <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
                         isLight
                           ? "bg-[#52525B]/8 border-[#52525B]/15 text-[#52525B]"
-                          : "bg-[#52525B]/15 border-[#52525B]/20 text-[#52525B]"
+                          : "bg-[#FAFAFA]/10 border-[#FAFAFA]/10 text-[#FAFAFA]"
                       }`}>
                         <Icon className="w-4 h-4" />
                       </div>
