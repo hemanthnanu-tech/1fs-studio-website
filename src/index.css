@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Allura&family=Cinzel:wght@400;600;800;900&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Herr+Von+Muellerhoff&family=Allison&family=Cinzel:wght@400;600;800;900&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 
 /* =============================
@@ -9,8 +9,8 @@
   --font-sans:      "Outfit", ui-sans-serif, system-ui, sans-serif;
   --font-serif:     "Cinzel", Georgia, serif;
   --font-mono:      "JetBrains Mono", ui-monospace, monospace;
-  --font-signature: "Alex Brush", cursive;
-  --font-script:    "Allura", cursive;
+  --font-signature: "Herr Von Muellerhoff", cursive;
+  --font-script:    "Allison", cursive;
 }
 
 /* ── CSS Design Tokens ── */
