@@ -15,7 +15,7 @@ Whether you're looking for professional baby themes, cinematic pre-wedding shoot
 ---
 
 ### Credits
-**Photography & Studio Vision by:** Darshan B  
+**Photography & Studio Vision by:**  **1FS Photography**
 **Website Architecture & Premium UI/UX Design by:** Hemanth Kumar K (@_.hemxnth__)  
 
 *Built with React, Vite, Tailwind CSS, and Framer Motion.*
