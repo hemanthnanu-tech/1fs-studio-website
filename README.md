@@ -1,10 +1,10 @@
-# 1FS Studio & Camera Rentals
+# 📸1FS Studio & Camera Rentals
 
 Welcome to the official digital storefront for **1FS Photography**. This platform bridges top-tier hardware rentals with stunning visual storytelling. 
 
 Whether you're looking for professional baby themes, cinematic pre-wedding shoots, automobile reveals, or high-end camera and gimbal rentals—1FS Studio delivers memorable moments with absolute precision.
 
-## Key Highlights
+## ✨Key Highlights
 
 - **Aesthetic Excellence:** A highly premium "Gallery Monochrome" design system tailored to highlight photography.
 - **Dynamic Lightbox:** Swipe through our extensive portfolio and high-resolution camera gear in a fully immersive, animated full-screen gallery.
@@ -15,8 +15,8 @@ Whether you're looking for professional baby themes, cinematic pre-wedding shoot
 ---
 
 ### Credits
-**Photography & Studio Vision by:**  **1FS Photography**
+**📸Photography & Studio Vision by:**  **1FS Photography**
 
-**Website Architecture & Premium UI/UX Design by:** Hemanth Kumar K (@_.hemxnth__)  
+**💻Website Architecture & Premium UI/UX Design by:** Hemanth Kumar K (@_.hemxnth__)  
 
-*Built with React, Vite, Tailwind CSS, and Framer Motion.*
+*⚡Built with React, Vite, Tailwind CSS, and Framer Motion.*
