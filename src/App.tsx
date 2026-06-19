@@ -143,7 +143,7 @@ export default function App() {
     localStorage.setItem("1fs_welcome_coupon_seen", "true");
   };
 
-  const blockedDatesList = effectiveBlockedDates.map(b => b.date);
+
 
   const handleAddBlockedDate = (date: string, reason: string) => {
     if (manualBlockedDates.some(b => b.date === date)) return;
