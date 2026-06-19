@@ -13,7 +13,8 @@ interface BookingCalendarProps {
     type: "rental";
     items: RentalItem[];
   } | null;
-  blockedDates: string[];
+  manualBlockedDates: string[];
+  allBookings: any[];
   onNewBookingAdded: (data: {
     customerName: string; customerPhone: string; customerEmail: string;
     type: "rental" | "photoshoot"; selectedItemName: string; pricePaid: number;
@@ -23,7 +24,7 @@ interface BookingCalendarProps {
   isLight: boolean;
 }
 
-export function BookingCalendar({ selectedItem, blockedDates, onNewBookingAdded, onClose, isLight }: BookingCalendarProps) {
+export function BookingCalendar({ selectedItem, manualBlockedDates, allBookings, onNewBookingAdded, onClose, isLight }: BookingCalendarProps) {
   if (!selectedItem) return null;
   const type = selectedItem.type;
   const isRental = type === "rental";
@@ -59,8 +60,35 @@ export function BookingCalendar({ selectedItem, blockedDates, onNewBookingAdded,
   const fmt = (d: number) => `${currentYear}-${String(currentMonth+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
   const isPast = (d: number) => new Date(currentYear, currentMonth, d) < new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
+  const isDateBlocked = (str: string) => {
+    if (manualBlockedDates.includes(str)) return true;
+    
+    // Check bookings
+    for (const b of allBookings) {
+      if (b.status === "cancelled") continue;
+      
+      const start = new Date(b.startDate);
+      const end = new Date(b.endDate);
+      const check = new Date(str);
+      
+      if (check >= start && check <= end) {
+        if (type === "photoshoot") {
+          // Photoshoots block other photoshoots
+          if (b.type === "photoshoot") return true;
+        } else if (type === "rental") {
+          // A rental item is blocked ONLY if that specific item was rented
+          const selectedItems = (selectedItem as any).items || [];
+          for (const item of selectedItems) {
+            if (b.selectedItemName.includes(item.name)) return true;
+          }
+        }
+      }
+    }
+    return false;
+  };
+
   const handleDayClick = (str: string) => {
-    if (blockedDates.includes(str)) return;
+    if (isDateBlocked(str)) return;
     if (type === "photoshoot") { setStartDateStr(str); setEndDateStr(str); return; }
     if (!startDateStr || (startDateStr && endDateStr && startDateStr !== endDateStr)) {
       setStartDateStr(str); setEndDateStr(str);
@@ -68,7 +96,7 @@ export function BookingCalendar({ selectedItem, blockedDates, onNewBookingAdded,
       const s = new Date(startDateStr), c = new Date(str);
       if (c >= s) {
         let t = new Date(s); let blocked = false;
-        while (t <= c) { if (blockedDates.includes(t.toISOString().split("T")[0])) { blocked=true; break; } t.setDate(t.getDate()+1); }
+        while (t <= c) { if (isDateBlocked(t.toISOString().split("T")[0])) { blocked=true; break; } t.setDate(t.getDate()+1); }
         if (blocked) { setStartDateStr(str); setEndDateStr(str); } else setEndDateStr(str);
       } else { setStartDateStr(str); setEndDateStr(str); }
     }
@@ -147,7 +175,7 @@ export function BookingCalendar({ selectedItem, blockedDates, onNewBookingAdded,
   for (let d = 1; d <= daysInMonth; d++) {
     const str = fmt(d);
     const past = isPast(d);
-    const blocked = blockedDates.includes(str);
+    const blocked = isDateBlocked(str);
     const todayStr = today.toISOString().split("T")[0];
     const sel = str === startDateStr || str === endDateStr;
     const inRange = startDateStr && endDateStr && str > startDateStr && str < endDateStr;

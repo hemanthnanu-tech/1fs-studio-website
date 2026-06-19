@@ -78,22 +78,7 @@ export default function App() {
     return initial;
   });
 
-  const effectiveBlockedDates: BlockedDate[] = [...manualBlockedDates];
-  bookings.forEach(b => {
-    if (b.status === "pending" || b.status === "confirmed") {
-      if (b.type === "photoshoot") {
-        effectiveBlockedDates.push({ date: b.startDate, reason: `Booking: ${b.selectedItemName}` });
-      } else {
-        const start = new Date(b.startDate);
-        const end = new Date(b.endDate);
-        let walk = new Date(start);
-        while (walk <= end) {
-          effectiveBlockedDates.push({ date: walk.toISOString().split("T")[0], reason: `Rental: ${b.selectedItemName}` });
-          walk.setDate(walk.getDate() + 1);
-        }
-      }
-    }
-  });
+  const manualBlockedDateStrings = manualBlockedDates.map(b => b.date);
 
   // ── Rental items ──
   const [rentalItems, setRentalItems] = useState<RentalItem[]>(() => {
@@ -460,15 +445,18 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {selectedBookingItem && (
-        <BookingCalendar
-          selectedItem={selectedBookingItem}
-          blockedDates={blockedDatesList}
-          onNewBookingAdded={handleAddNewBooking}
-          onClose={() => setSelectedBookingItem(null)}
-          isLight={isLight}
-        />
-      )}
+      <AnimatePresence>
+        {selectedBookingItem && (
+          <BookingCalendar
+            selectedItem={selectedBookingItem}
+            manualBlockedDates={manualBlockedDateStrings}
+            allBookings={bookings}
+            onNewBookingAdded={handleAddNewBooking}
+            onClose={() => setSelectedBookingItem(null)}
+            isLight={isLight}
+          />
+        )}
+      </AnimatePresence>
 
       {isAdminOpen && (
         <AdminPanel

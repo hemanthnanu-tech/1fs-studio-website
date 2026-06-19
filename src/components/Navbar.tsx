@@ -69,6 +69,10 @@ export function Navbar({ onAdminClick, bookingsCount, isLight, onToggleTheme }: 
             <a
               key={link.href}
               href={link.href}
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById(link.href.slice(1))?.scrollIntoView({ behavior: 'smooth' });
+              }}
               className={`relative text-[11px] font-mono tracking-widest uppercase font-semibold transition-colors duration-300 group ${
                 isLight ? "text-[#71717A] hover:text-[#52525B]" : "text-[#A1A1AA] hover:text-[#A1A1AA]"
               }`}
