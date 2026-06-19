@@ -22,7 +22,7 @@ export function Navbar({ onAdminClick, bookingsCount, isLight, onToggleTheme }: 
   const navLinks = [
     { label: "Shoot Packages", href: "#packages" },
     { label: "Camera Rentals", href: "#rentals" },
-    { label: "Contact", href: "#developer" },
+    { label: "Contact", href: "#contact" },
   ];
 
   const navBg = scrolled
