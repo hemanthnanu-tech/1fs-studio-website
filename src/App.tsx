@@ -18,39 +18,78 @@ import { PHOTOSHOOT_CATEGORIES, RENTAL_ITEMS, STUDIO_STATISTICS, OUR_WORK_GALLER
 import { Booking, BlockedDate, RentalItem, PriceOption, PhotoshootCategory } from "./types";
 import { Camera, ShieldAlert, Check, Video, Waves, X, ShoppingCart, Star } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { db } from "./firebase";
-import { collection, onSnapshot, addDoc, doc, updateDoc, setDoc, deleteDoc } from "firebase/firestore";
 
 export default function App() {
-  // ── Firebase Synchronization ──
-  const [bookings, setBookings] = useState<Booking[]>([]);
-  const [manualBlockedDates, setManualBlockedDates] = useState<BlockedDate[]>([]);
-  const [rentalItems, setRentalItems] = useState<RentalItem[]>(RENTAL_ITEMS);
+  // ── Bookings ──
+  const [bookings, setBookings] = useState<Booking[]>(() => {
+    const saved = localStorage.getItem("1fs_bookings");
+    if (saved) { try { return JSON.parse(saved); } catch { return []; } }
 
-  useEffect(() => {
-    const unsubBookings = onSnapshot(collection(db, "bookings"), (snapshot) => {
-      const data = snapshot.docs.map(d => ({ ...d.data(), _docId: d.id } as any));
-      setBookings(data);
-    });
-    
-    const unsubDates = onSnapshot(collection(db, "blockedDates"), (snapshot) => {
-      const data = snapshot.docs.map(d => ({ ...d.data(), _docId: d.id } as any));
-      setManualBlockedDates(data);
-    });
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowStr = tomorrow.toISOString().split("T")[0];
+    const nextWeek = new Date();
+    nextWeek.setDate(nextWeek.getDate() + 5);
+    const nextWeekStr = nextWeek.toISOString().split("T")[0];
 
-    const unsubItems = onSnapshot(collection(db, "rentalItems"), (snapshot) => {
-      const data = snapshot.docs.map(d => ({ ...d.data(), _docId: d.id } as any));
-      if (data.length > 0) setRentalItems(data);
-    });
+    const seeds: Booking[] = [
+      {
+        id: "seed-1",
+        customerName: "Rahul Sharma",
+        customerPhone: "919876543210",
+        customerEmail: "rahul@gmail.com",
+        type: "rental",
+        selectedItemName: "Sony ZV-E10 Mirrorless",
+        pricePaid: 1499,
+        startDate: tomorrowStr,
+        endDate: tomorrowStr,
+        status: "confirmed",
+        whatsappSent: true,
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: "seed-2",
+        customerName: "Priya Patel",
+        customerPhone: "919001234567",
+        customerEmail: "priya@gmail.com",
+        type: "photoshoot",
+        selectedItemName: "Baby Shoot & Baby Shower (STANDARD)",
+        pricePaid: 9999,
+        startDate: nextWeekStr,
+        endDate: nextWeekStr,
+        timeSlot: "Morning (9AM–2PM)",
+        status: "pending",
+        whatsappSent: false,
+        createdAt: new Date().toISOString()
+      }
+    ];
+    localStorage.setItem("1fs_bookings", JSON.stringify(seeds));
+    return seeds;
+  });
 
-    return () => {
-      unsubBookings();
-      unsubDates();
-      unsubItems();
-    };
-  }, []);
+  // ── Blocked dates (Manual) ──
+  const [manualBlockedDates, setManualBlockedDates] = useState<BlockedDate[]>(() => {
+    const saved = localStorage.getItem("1fs_blocked_dates");
+    if (saved) { try { const parsed = JSON.parse(saved); if (Array.isArray(parsed) && parsed.length > 0) return parsed; } catch {} }
+    const nextWeek = new Date();
+    nextWeek.setDate(nextWeek.getDate() + 5);
+    const initial = [{ date: nextWeek.toISOString().split("T")[0], reason: "Baby Shower — Pre Booked" }];
+    localStorage.setItem("1fs_blocked_dates", JSON.stringify(initial));
+    return initial;
+  });
 
   const manualBlockedDateStrings = manualBlockedDates.map(b => b.date);
+
+  // ── Rental items ──
+  const [rentalItems, setRentalItems] = useState<RentalItem[]>(() => {
+    const saved = localStorage.getItem("1fs_rental_items");
+    if (saved) { try { return JSON.parse(saved); } catch { return RENTAL_ITEMS; } }
+    return RENTAL_ITEMS;
+  });
+
+  useEffect(() => { try { localStorage.setItem("1fs_bookings", JSON.stringify(bookings)); } catch(e){} }, [bookings]);
+  useEffect(() => { try { localStorage.setItem("1fs_blocked_dates", JSON.stringify(manualBlockedDates)); } catch(e){} }, [manualBlockedDates]);
+  useEffect(() => { try { localStorage.setItem("1fs_rental_items", JSON.stringify(rentalItems)); } catch(e){} }, [rentalItems]);
 
   // ── Theme — default LIGHT ──
   const [isLight, setIsLight] = useState<boolean>(() => {
@@ -106,29 +145,22 @@ export default function App() {
 
 
 
-  const handleAddBlockedDate = async (date: string, reason: string) => {
+  const handleAddBlockedDate = (date: string, reason: string) => {
     if (manualBlockedDates.some(b => b.date === date)) return;
-    await addDoc(collection(db, "blockedDates"), { date, reason });
+    setManualBlockedDates(prev => [...prev, { date, reason }]);
   };
 
-  const handleRemoveBlockedDate = async (date: string) => {
-    const target = manualBlockedDates.find(b => b.date === date);
-    if (target && (target as any)._docId) {
-      await deleteDoc(doc(db, "blockedDates", (target as any)._docId));
-    }
+  const handleRemoveBlockedDate = (date: string) => {
+    setManualBlockedDates(prev => prev.filter(b => b.date !== date));
   };
 
-  const handleUpdateBookingStatus = async (id: string, status: "pending"|"confirmed"|"completed"|"cancelled") => {
-    const target = bookings.find(b => b.id === id);
-    if (target && (target as any)._docId) {
-      await updateDoc(doc(db, "bookings", (target as any)._docId), { status });
-    }
+  const handleUpdateBookingStatus = (id: string, status: "pending"|"confirmed"|"completed"|"cancelled") => {
+    setBookings(prev => prev.map(b => b.id === id ? { ...b, status } : b));
   };
 
-  const handleDeleteBooking = async (id: string) => {
-    const target = bookings.find(b => b.id === id);
-    if (target && (target as any)._docId) {
-      await deleteDoc(doc(db, "bookings", (target as any)._docId));
+  const handleDeleteBooking = (id: string) => {
+    if (window.confirm("Delete this booking entry?")) {
+      setBookings(prev => prev.filter(b => b.id !== id));
     }
   };
 
@@ -138,25 +170,19 @@ export default function App() {
     ));
   };
 
-  const handleAddNewBooking = async (data: Omit<Booking, "id"|"status"|"whatsappSent"|"createdAt">) => {
-    const newB: Omit<Booking, "id"> = {
+  const handleAddNewBooking = (data: {
+    customerName: string; customerPhone: string; customerEmail: string;
+    type: "rental"|"photoshoot"; selectedItemName: string; pricePaid: number;
+    startDate: string; endDate: string; timeSlot?: string; notes?: string;
+  }) => {
+    const record: Booking = {
+      id: "booking-" + Date.now(),
       ...data,
       status: "pending",
       whatsappSent: false,
       createdAt: new Date().toISOString()
     };
-    
-    // Add unique ID
-    const fullB = { ...newB, id: `bk-${Date.now()}` };
-    await addDoc(collection(db, "bookings"), fullB);
-    
-    // Sync cart stock based on booking
-    if (data.type === "rental") {
-      // Find items that were booked and mark availability=false in firebase if we were tracking it
-      // For now, let's just let the frontend logic handle date blocking. 
-    }
-    setCartItems([]);
-    setSelectedBookingItem(null);
+    setBookings(prev => [record, ...prev]);
   };
 
   const handleRentClick = (items: RentalItem[]) =>
@@ -166,14 +192,17 @@ export default function App() {
     setSelectedBookingItem({ type: "photoshoot", item: category, priceOption });
 
   return (
-    <div className={`relative min-h-screen text-[#FAFAFA] font-sans selection:bg-[#52525B]/30 transition-colors duration-500`}>
-      {/* ── Fluid Animated Background ── */}
-      <div className={`fluid-bg ${isLight ? "light" : ""}`}>
-        <div className="fluid-blob" style={{ background: isLight ? "#A7C7E7" : "#0E6BA8", width: "40vw", height: "40vh", top: "10%", left: "10%", animationDelay: "0s" }} />
-        <div className="fluid-blob" style={{ background: isLight ? "#EADDFF" : "#6A5ACD", width: "50vw", height: "50vh", top: "40%", left: "40%", animationDelay: "-5s" }} />
-        <div className="fluid-blob" style={{ background: isLight ? "#F5E6CC" : "#52525B", width: "35vw", height: "35vh", top: "60%", left: "10%", animationDelay: "-10s" }} />
+    <div className={`min-h-screen font-sans transition-colors duration-700 liquid-bg-container ${
+      isLight ? "bg-[#FAFAFA] text-[#171717]" : "bg-[#050505] text-[#FAFAFA]"
+    }`}>
+      {/* Liquid Blobs Background */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+        <div className="liquid-blob-1" />
+        <div className="liquid-blob-2" />
+        <div className="liquid-blob-3" />
       </div>
 
+      <div className="relative z-10">
       <AnimatePresence>
       {isAlertVisible && (
         <motion.div 
@@ -323,6 +352,7 @@ export default function App() {
       </main>
 
       <SocialFooter isLight={isLight} />
+      </div>
 
       {isLightboxOpen && (
         <Lightbox 

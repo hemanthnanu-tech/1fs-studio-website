@@ -27,15 +27,15 @@ export function Navbar({ onAdminClick, bookingsCount, isLight, onToggleTheme }: 
 
   const navBg = scrolled
     ? isLight
-      ? "bg-white/70 backdrop-blur-2xl border border-white/40 shadow-lg shadow-black/5"
-      : "bg-[#09090B]/70 backdrop-blur-2xl border border-white/10 shadow-lg shadow-black/20"
+      ? "liquid-glass-light border-b"
+      : "liquid-glass-dark border-b"
     : isLight
-      ? "bg-white/40 backdrop-blur-xl border border-white/20 shadow-sm"
-      : "bg-[#09090B]/40 backdrop-blur-xl border border-white/5 shadow-sm";
+      ? "bg-[#FAFAFA]/40 backdrop-blur-md border-b border-transparent"
+      : "bg-[#09090B]/40 backdrop-blur-md border-b border-transparent";
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 w-full px-4 sm:px-6 pt-4 sm:pt-6 transition-all duration-500 pointer-events-none">
-      <div className={`pointer-events-auto mx-auto flex max-w-6xl h-16 sm:h-20 items-center justify-between px-4 sm:px-8 rounded-full transition-all duration-500 ${navBg}`}>
+    <header className={`sticky top-0 z-40 w-full transition-all duration-500 ${navBg}`}>
+      <div className="mx-auto flex max-w-7xl h-16 sm:h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
 
         {/* ── Brand Logo ── */}
         <a href="#" className="flex items-center gap-2.5 sm:gap-3 group min-w-0">

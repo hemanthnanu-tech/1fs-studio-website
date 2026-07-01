@@ -140,7 +140,7 @@ export function PhotoshootPackages({ categories, onBookPackageClick, isLight }: 
                       {renderIcon(cat.icon, "w-6 h-6 text-white")}
                     </div>
                     
-                    <h3 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-white mb-2 leading-tight">
+                    <h3 className="fluid-text-h3 font-serif font-bold text-white mb-2 leading-tight">
                       {cat.name}
                     </h3>
                     
@@ -177,11 +177,12 @@ export function PhotoshootPackages({ categories, onBookPackageClick, isLight }: 
 
             {/* Modal Content */}
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className={`relative w-full max-w-6xl max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-3xl shadow-2xl border backdrop-blur-xl ${
-                isLight ? CATEGORY_STYLES[selectedCategory.id].modalLight : CATEGORY_STYLES[selectedCategory.id].modalDark
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className={`fixed inset-x-0 bottom-0 max-h-[90vh] overflow-y-auto rounded-t-[32px] sm:rounded-[32px] sm:top-10 sm:bottom-10 sm:max-w-2xl sm:mx-auto sm:h-fit shadow-2xl border ${
+                isLight ? "liquid-glass-light" : "liquid-glass-dark"
               }`}
             >
               {/* Close Button */}

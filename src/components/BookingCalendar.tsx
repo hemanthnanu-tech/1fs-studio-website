@@ -4,9 +4,6 @@ import { RentalItem, PhotoshootCategory, PriceOption } from "../types";
 import { STUDIO_STATISTICS } from "../data";
 import { motion, AnimatePresence } from "motion/react";
 
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
-
 interface BookingCalendarProps {
   selectedItem: {
     type: "photoshoot";
@@ -70,13 +67,9 @@ export function BookingCalendar({ selectedItem, manualBlockedDates, allBookings,
     for (const b of allBookings) {
       if (b.status === "cancelled") continue;
       
-      const [sy, sm, sd] = b.startDate.split("-").map(Number);
-      const [ey, em, ed] = b.endDate.split("-").map(Number);
-      const [cy, cm, cd] = str.split("-").map(Number);
-
-      const start = new Date(sy, sm-1, sd).getTime();
-      const end = new Date(ey, em-1, ed).getTime();
-      const check = new Date(cy, cm-1, cd).getTime();
+      const start = new Date(b.startDate);
+      const end = new Date(b.endDate);
+      const check = new Date(str);
       
       if (check >= start && check <= end) {
         if (type === "photoshoot") {
@@ -100,51 +93,24 @@ export function BookingCalendar({ selectedItem, manualBlockedDates, allBookings,
     if (!startDateStr || (startDateStr && endDateStr && startDateStr !== endDateStr)) {
       setStartDateStr(str); setEndDateStr(str);
     } else if (startDateStr && startDateStr === endDateStr) {
-      const [sy, sm, sd] = startDateStr.split("-").map(Number);
-      const [cy, cm, cd] = str.split("-").map(Number);
-      const s = new Date(sy, sm-1, sd);
-      const c = new Date(cy, cm-1, cd);
-
-      if (c.getTime() >= s.getTime()) {
+      const s = new Date(startDateStr), c = new Date(str);
+      if (c >= s) {
         let t = new Date(s); let blocked = false;
-        while (t.getTime() <= c.getTime()) { 
-          const tStr = `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")}`;
-          if (isDateBlocked(tStr)) { blocked=true; break; } 
-          t.setDate(t.getDate()+1); 
-        }
+        while (t <= c) { if (isDateBlocked(t.toISOString().split("T")[0])) { blocked=true; break; } t.setDate(t.getDate()+1); }
         if (blocked) { setStartDateStr(str); setEndDateStr(str); } else setEndDateStr(str);
       } else { setStartDateStr(str); setEndDateStr(str); }
     }
   };
 
-  const handleApplyCoupon = async () => {
+  const handleApplyCoupon = () => {
     if (couponCode.toUpperCase() === "1FSNEW") {
-      if (!clientPhone || clientPhone.length < 10) {
-        setCouponError("Please enter your phone number first.");
+      const used = localStorage.getItem("1fsnew_used");
+      if (used) {
+        setCouponError("Coupon already used on this device.");
         setCouponApplied(false);
-        return;
-      }
-      // Check firebase for past usage by this phone number
-      try {
-        const q = query(collection(db, "bookings"), where("customerPhone", "==", clientPhone));
-        const snapshot = await getDocs(q);
-        if (!snapshot.empty) {
-          setCouponError("This coupon is for first-time customers only.");
-          setCouponApplied(false);
-        } else {
-          setCouponApplied(true);
-          setCouponError("");
-        }
-      } catch (e) {
-        // Fallback for demo mode without proper firebase rules
-        const used = localStorage.getItem(`1fsnew_used_${clientPhone}`);
-        if (used) {
-          setCouponError("This coupon is for first-time customers only.");
-          setCouponApplied(false);
-        } else {
-          setCouponApplied(true);
-          setCouponError("");
-        }
+      } else {
+        setCouponApplied(true);
+        setCouponError("");
       }
     } else {
       setCouponError("Invalid coupon code.");
@@ -152,9 +118,15 @@ export function BookingCalendar({ selectedItem, manualBlockedDates, allBookings,
     }
   };
 
-  const duration = startDateStr && endDateStr
-    ? Math.ceil(Math.abs(new Date(endDateStr).getTime() - new Date(startDateStr).getTime()) / 86400000) + 1
-    : 1;
+  const getDuration = () => {
+    if (!startDateStr || !endDateStr) return 1;
+    const [sy, sm, sd] = startDateStr.split("-").map(Number);
+    const [ey, em, ed] = endDateStr.split("-").map(Number);
+    const utc1 = Date.UTC(sy, sm - 1, sd);
+    const utc2 = Date.UTC(ey, em - 1, ed);
+    return Math.floor(Math.abs(utc2 - utc1) / 86400000) + 1;
+  };
+  const duration = getDuration();
 
   const basePrice = isRental
     ? (selectedItem as any).items.reduce((sum: number, i: any) => sum + i.pricePerDay, 0) * duration
@@ -163,9 +135,8 @@ export function BookingCalendar({ selectedItem, manualBlockedDates, allBookings,
   const totalPrice = couponApplied ? Math.max(0, basePrice - 100) : basePrice;
 
   const sendWhatsApp = () => {
-    // Store fallback usage marker
     if (couponApplied) {
-      localStorage.setItem(`1fsnew_used_${clientPhone}`, "true");
+      localStorage.setItem("1fsnew_used", "true");
     }
     const dateRange = startDateStr === endDateStr ? `on ${startDateStr}` : `from ${startDateStr} to ${endDateStr} (${duration} days)`;
     const slotText  = type === "photoshoot" ? `\n🕒 Time Slot: ${selectedSlot}` : "";
@@ -254,14 +225,8 @@ export function BookingCalendar({ selectedItem, manualBlockedDates, allBookings,
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 20 }}
           transition={{ type: "spring", stiffness: 350, damping: 28 }}
-          className={`relative w-full max-w-3xl rounded-2xl border shadow-2xl p-4 sm:p-6 md:p-8 my-4 sm:my-8 ${modalBg}`}
-          style={{ boxShadow: isLight
-            ? "0 25px 80px -20px rgba(14,107,168,0.15), 0 0 0 1px rgba(14,107,168,0.08)"
-            : "0 25px 80px -20px rgba(0,0,0,0.8), 0 0 40px rgba(14,107,168,0.08)" }}
+          className={`relative w-full max-w-3xl rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8 my-4 sm:my-8 ${isLight ? "liquid-glass-light" : "liquid-glass-dark"}`}
         >
-          {/* Top gradient line */}
-          <div className={`absolute top-0 inset-x-0 h-px rounded-t-2xl ${isLight ? "bg-black/10" : "bg-white/10"}`} />
-
           {/* Header */}
           <div className={`flex items-center justify-between border-b pb-4 mb-5 ${border}`}>
             <div>

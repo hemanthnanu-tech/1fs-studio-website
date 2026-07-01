@@ -14,13 +14,17 @@ export function SocialFooter({ isLight }: SocialFooterProps) {
   const subText  = isLight ? "text-[#71717A]" : "text-[#A1A1AA]";
   const border   = isLight ? "border-[#E4E4E7]" : "border-[#52525B]/10";
   const cardBg   = isLight
-    ? "glass-panel-light"
-    : "glass-panel-dark";
+    ? "bg-[#FAFAFA] border-[#E4E4E7]"
+    : "bg-[#09090B] border-[#52525B]/12";
 
   return (
     <footer
       id="contact"
-      className={`py-12 sm:py-16 mt-auto border-t relative overflow-hidden transition-colors duration-500 bg-transparent ${border}`}
+      className={`py-12 sm:py-16 mt-auto border-t relative overflow-hidden transition-colors duration-500 ${
+        isLight
+          ? "bg-white border-t border-[#E4E4E7]"
+          : "bg-[#09090B] border-t border-[#52525B]/10"
+      }`}
     >
       {/* Wave accent top */}
       <div className="absolute top-0 left-0 w-full overflow-hidden pointer-events-none" style={{ height: 36 }}>
@@ -30,7 +34,9 @@ export function SocialFooter({ isLight }: SocialFooterProps) {
         </svg>
       </div>
 
-      {/* Glow blobs removed in favor of fluid background */}
+      {/* Glow blobs */}
+      <div className="absolute bottom-0 right-0 w-[250px] h-[250px] rounded-full blur-[110px] pointer-events-none"
+        style={{ background: isLight ? "rgba(14,107,168,0.05)" : "rgba(14,107,168,0.07)" }} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 sm:pt-20 pb-6 sm:pb-8 relative z-10">
 

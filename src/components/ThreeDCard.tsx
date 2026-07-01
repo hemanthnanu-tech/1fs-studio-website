@@ -59,8 +59,8 @@ export function ThreeDCard({
         style={{ scale, transformStyle: "preserve-3d" }}
         className={`relative h-full w-full rounded-2xl transition-shadow duration-300 ${
           isLight
-            ? "glass-panel-light"
-            : "glass-panel-dark"
+            ? "liquid-glass-light"
+            : "liquid-glass-dark"
         }`}
         animate={{
           boxShadow: isHovered
