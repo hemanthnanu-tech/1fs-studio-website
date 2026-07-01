@@ -16,37 +16,37 @@ const CATEGORY_STYLES: Record<string, { bgImage: string; color: string; colorLig
     bgImage: "package/Baby_Shoot_Baby_Shower.png",
     color: "#171717",
     colorLight: "#E4E4E7",
-    modalLight: "bg-white border-black/10",
-    modalDark: "bg-[#09090B] border-white/10",
-    btnClassLight: "bg-[#171717] text-white hover:bg-black",
-    btnClassDark: "bg-white text-black hover:bg-gray-200",
+    modalLight: "glass-panel-light",
+    modalDark: "glass-panel-dark",
+    btnClassLight: "bg-white/50 hover:bg-white/80 text-black backdrop-blur-xl shadow-lg border border-white/40",
+    btnClassDark: "bg-white/10 hover:bg-white/20 text-white backdrop-blur-xl shadow-lg border border-white/10",
   },
   "car-bike": {
     bgImage: "package/Car_Bike_Delivery.png",
     color: "#171717",
     colorLight: "#E4E4E7",
-    modalLight: "bg-white border-black/10",
-    modalDark: "bg-[#09090B] border-white/10",
-    btnClassLight: "bg-[#171717] text-white hover:bg-black",
-    btnClassDark: "bg-white text-black hover:bg-gray-200",
+    modalLight: "glass-panel-light",
+    modalDark: "glass-panel-dark",
+    btnClassLight: "bg-white/50 hover:bg-white/80 text-black backdrop-blur-xl shadow-lg border border-white/40",
+    btnClassDark: "bg-white/10 hover:bg-white/20 text-white backdrop-blur-xl shadow-lg border border-white/10",
   },
   "traditional-house": {
     bgImage: "package/Traditional_House_Warming.png",
     color: "#171717",
     colorLight: "#E4E4E7",
-    modalLight: "bg-white border-black/10",
-    modalDark: "bg-[#09090B] border-white/10",
-    btnClassLight: "bg-[#171717] text-white hover:bg-black",
-    btnClassDark: "bg-white text-black hover:bg-gray-200",
+    modalLight: "glass-panel-light",
+    modalDark: "glass-panel-dark",
+    btnClassLight: "bg-white/50 hover:bg-white/80 text-black backdrop-blur-xl shadow-lg border border-white/40",
+    btnClassDark: "bg-white/10 hover:bg-white/20 text-white backdrop-blur-xl shadow-lg border border-white/10",
   },
   "pre-wedding": {
     bgImage: "package/Pre_Wedding.png",
     color: "#171717",
     colorLight: "#E4E4E7",
-    modalLight: "bg-white border-black/10",
-    modalDark: "bg-[#09090B] border-white/10",
-    btnClassLight: "bg-[#171717] text-white hover:bg-black",
-    btnClassDark: "bg-white text-black hover:bg-gray-200",
+    modalLight: "glass-panel-light",
+    modalDark: "glass-panel-dark",
+    btnClassLight: "bg-white/50 hover:bg-white/80 text-black backdrop-blur-xl shadow-lg border border-white/40",
+    btnClassDark: "bg-white/10 hover:bg-white/20 text-white backdrop-blur-xl shadow-lg border border-white/10",
   }
 };
 
@@ -79,9 +79,7 @@ export function PhotoshootPackages({ categories, onBookPackageClick, isLight }: 
   return (
     <section
       id="packages"
-      className={`py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-b relative overflow-hidden transition-colors duration-500 ${
-        isLight ? "bg-[#FFFFFF]" : "bg-[#09090B]"
-      } ${border}`}
+      className={`py-16 sm:py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden transition-colors duration-500 bg-transparent ${border}`}
     >
       <div className="max-w-7xl mx-auto relative z-10">
         

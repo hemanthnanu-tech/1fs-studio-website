@@ -34,30 +34,12 @@ export function HeroSection({ isLight }: HeroSectionProps) {
     <div
       ref={heroRef}
       onMouseMove={handleMouseMove}
-      className={`relative min-h-[92vh] flex flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8 py-16 sm:py-20 transition-colors duration-700 ${
-        isLight
-          ? "bg-[#FAFAFA]"
-          : "bg-[#09090B]"
-      }`}
+      className="relative min-h-[92vh] flex flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8 py-16 sm:py-20 transition-colors duration-700 bg-transparent"
     >
       {/* Grid overlay */}
       <div className={`absolute inset-0 pointer-events-none ${isLight ? "bg-ocean-grid-light" : "bg-ocean-grid"}`} />
 
-      {/* Animated gradient orbs */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <motion.div
-          animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/4 left-1/3 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] rounded-full blur-[130px]"
-          style={{ background: isLight ? "rgba(14,107,168,0.10)" : "rgba(14,107,168,0.18)" }}
-        />
-        <motion.div
-          animate={{ x: [0, -25, 0], y: [0, 25, 0] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          className="absolute top-1/2 right-1/4 w-[250px] sm:w-[400px] h-[250px] sm:h-[400px] rounded-full blur-[120px]"
-          style={{ background: isLight ? "rgba(106,90,205,0.07)" : "rgba(106,90,205,0.12)" }}
-        />
-      </div>
+      {/* Animated gradient orbs removed since App.tsx provides fluid background */}
 
       {/* 3D HUD Aperture — hidden on very small screens */}
       <div
@@ -142,8 +124,10 @@ export function HeroSection({ isLight }: HeroSectionProps) {
           <button
             id="hero-book-shoot-btn"
             onClick={() => scrollTo("packages")}
-            className={`btn-ripple px-6 sm:px-8 h-12 sm:h-14 font-semibold rounded-2xl text-xs sm:text-sm uppercase tracking-widest font-mono flex items-center justify-center gap-2 cursor-pointer shadow-lg ${
-              isLight ? "bg-[#171717] text-white" : "bg-white text-black"
+            className={`group flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full text-xs sm:text-sm font-mono uppercase tracking-widest font-bold shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 ${
+              isLight
+                ? "glass-panel-light hover:bg-white/70 text-[#171717]"
+                : "glass-panel-dark hover:bg-black/50 text-white"
             }`}
           >
             <Sparkles className="w-4 h-4 shrink-0" />
@@ -154,13 +138,13 @@ export function HeroSection({ isLight }: HeroSectionProps) {
           <button
             id="hero-rent-gear-btn"
             onClick={() => scrollTo("rentals")}
-            className={`btn-ripple px-6 sm:px-8 h-12 sm:h-14 border rounded-2xl text-xs sm:text-sm uppercase tracking-widest font-mono transition-all cursor-pointer flex items-center justify-center gap-2 ${
+            className={`group flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full text-xs sm:text-sm font-mono uppercase tracking-widest font-bold border transition-all duration-300 hover:scale-105 active:scale-95 ${
               isLight
-                ? "glass-light text-[#171717] hover:border-[#52525B]/60 hover:shadow-sm"
-                : "glass-dark text-[#A1A1AA] hover:border-[#52525B]/50 hover:text-[#FAFAFA]"
+                ? "border-[#171717]/20 bg-white/20 backdrop-blur-md text-[#171717] hover:bg-white/40"
+                : "border-white/20 bg-black/20 backdrop-blur-md text-white hover:bg-white/10"
             }`}
           >
-            <Camera className="w-4 h-4 shrink-0 text-[#52525B]" />
+            <Camera className="w-4 h-4 shrink-0" />
             Rent Camera Gear
           </button>
         </motion.div>

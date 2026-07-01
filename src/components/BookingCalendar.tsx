@@ -67,9 +67,13 @@ export function BookingCalendar({ selectedItem, manualBlockedDates, allBookings,
     for (const b of allBookings) {
       if (b.status === "cancelled") continue;
       
-      const start = new Date(b.startDate);
-      const end = new Date(b.endDate);
-      const check = new Date(str);
+      const [sy, sm, sd] = b.startDate.split("-").map(Number);
+      const [ey, em, ed] = b.endDate.split("-").map(Number);
+      const [cy, cm, cd] = str.split("-").map(Number);
+
+      const start = new Date(sy, sm-1, sd).getTime();
+      const end = new Date(ey, em-1, ed).getTime();
+      const check = new Date(cy, cm-1, cd).getTime();
       
       if (check >= start && check <= end) {
         if (type === "photoshoot") {
@@ -93,10 +97,18 @@ export function BookingCalendar({ selectedItem, manualBlockedDates, allBookings,
     if (!startDateStr || (startDateStr && endDateStr && startDateStr !== endDateStr)) {
       setStartDateStr(str); setEndDateStr(str);
     } else if (startDateStr && startDateStr === endDateStr) {
-      const s = new Date(startDateStr), c = new Date(str);
-      if (c >= s) {
+      const [sy, sm, sd] = startDateStr.split("-").map(Number);
+      const [cy, cm, cd] = str.split("-").map(Number);
+      const s = new Date(sy, sm-1, sd);
+      const c = new Date(cy, cm-1, cd);
+
+      if (c.getTime() >= s.getTime()) {
         let t = new Date(s); let blocked = false;
-        while (t <= c) { if (isDateBlocked(t.toISOString().split("T")[0])) { blocked=true; break; } t.setDate(t.getDate()+1); }
+        while (t.getTime() <= c.getTime()) { 
+          const tStr = `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")}`;
+          if (isDateBlocked(tStr)) { blocked=true; break; } 
+          t.setDate(t.getDate()+1); 
+        }
         if (blocked) { setStartDateStr(str); setEndDateStr(str); } else setEndDateStr(str);
       } else { setStartDateStr(str); setEndDateStr(str); }
     }

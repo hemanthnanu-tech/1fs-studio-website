@@ -36,15 +36,8 @@ export function CameraRentals({ items, isLight, onAddToCart, onProductClick }: C
   return (
     <section
       id="rentals"
-      className={`py-16 sm:py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden transition-colors duration-500 ${
-        isLight ? "bg-[#FAFAFA]" : "bg-[#09090B]"
-      }`}
+      className={`py-16 sm:py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden transition-colors duration-500 bg-transparent`}
     >
-      {/* Background blobs */}
-      <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-[400px] h-[400px] rounded-full blur-[150px] pointer-events-none"
-        style={{ background: isLight ? "rgba(14,107,168,0.07)" : "rgba(14,107,168,0.10)" }} />
-      <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] rounded-full blur-[130px] pointer-events-none"
-        style={{ background: isLight ? "rgba(0,137,123,0.05)" : "rgba(0,137,123,0.07)" }} />
 
       <div className="max-w-7xl mx-auto relative z-10">
 
@@ -100,8 +93,8 @@ export function CameraRentals({ items, isLight, onAddToCart, onProductClick }: C
                   categoryFilter === cat 
                     ? "bg-[#52525B] text-white border-[#52525B]" 
                     : isLight 
-                      ? "bg-white text-[#71717A] border-[#E4E4E7] hover:border-[#52525B]" 
-                      : "bg-[#09090B] text-[#A1A1AA] border-[#52525B]/20 hover:border-[#52525B]/50"
+                      ? "glass-panel-light text-[#71717A] hover:border-[#52525B]" 
+                      : "glass-panel-dark text-[#A1A1AA] hover:border-[#52525B]/50"
                 }`}
               >
                 {cat}

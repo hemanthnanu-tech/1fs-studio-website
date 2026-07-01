@@ -27,15 +27,15 @@ export function Navbar({ onAdminClick, bookingsCount, isLight, onToggleTheme }: 
 
   const navBg = scrolled
     ? isLight
-      ? "border-b border-[#E4E4E7] bg-white/90 backdrop-blur-xl shadow-sm"
-      : "border-b border-[#52525B]/15 bg-[#09090B]/92 backdrop-blur-xl shadow-sm"
+      ? "bg-white/70 backdrop-blur-2xl border border-white/40 shadow-lg shadow-black/5"
+      : "bg-[#09090B]/70 backdrop-blur-2xl border border-white/10 shadow-lg shadow-black/20"
     : isLight
-      ? "bg-[#FAFAFA]/95 border-b border-[#E4E4E7]/60"
-      : "bg-[#09090B]/95 border-b border-[#52525B]/10";
+      ? "bg-white/40 backdrop-blur-xl border border-white/20 shadow-sm"
+      : "bg-[#09090B]/40 backdrop-blur-xl border border-white/5 shadow-sm";
 
   return (
-    <header className={`sticky top-0 z-40 w-full transition-all duration-500 ${navBg}`}>
-      <div className="mx-auto flex max-w-7xl h-16 sm:h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="fixed top-0 inset-x-0 z-50 w-full px-4 sm:px-6 pt-4 sm:pt-6 transition-all duration-500 pointer-events-none">
+      <div className={`pointer-events-auto mx-auto flex max-w-6xl h-16 sm:h-20 items-center justify-between px-4 sm:px-8 rounded-full transition-all duration-500 ${navBg}`}>
 
         {/* ── Brand Logo ── */}
         <a href="#" className="flex items-center gap-2.5 sm:gap-3 group min-w-0">

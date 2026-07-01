@@ -59,8 +59,8 @@ export function ThreeDCard({
         style={{ scale, transformStyle: "preserve-3d" }}
         className={`relative h-full w-full rounded-2xl transition-shadow duration-300 ${
           isLight
-            ? "border border-[#E4E4E7] bg-white"
-            : "border border-[#52525B]/15 bg-[#09090B]"
+            ? "glass-panel-light"
+            : "glass-panel-dark"
         }`}
         animate={{
           boxShadow: isHovered
@@ -98,9 +98,7 @@ export function ThreeDCard({
 
         {/* Inner content */}
         <div
-          className={`h-full w-full overflow-hidden rounded-xl p-5 relative z-10 ${
-            isLight ? "bg-white" : "bg-[#09090B]"
-          }`}
+          className={`h-full w-full overflow-hidden rounded-xl p-5 relative z-10 bg-transparent`}
           style={{ transformStyle: "preserve-3d" }}
         >
           {children}

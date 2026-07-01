@@ -192,9 +192,13 @@ export default function App() {
     setSelectedBookingItem({ type: "photoshoot", item: category, priceOption });
 
   return (
-    <div className={`min-h-screen flex flex-col justify-between transition-colors duration-500 ${
-      isLight ? "bg-[#FAFAFA] text-[#171717]" : "bg-[#09090B] text-[#FAFAFA]"
-    }`}>
+    <div className={`relative min-h-screen text-[#FAFAFA] font-sans selection:bg-[#52525B]/30 transition-colors duration-500`}>
+      {/* ── Fluid Animated Background ── */}
+      <div className={`fluid-bg ${isLight ? "light" : ""}`}>
+        <div className="fluid-blob" style={{ background: isLight ? "#A7C7E7" : "#0E6BA8", width: "40vw", height: "40vh", top: "10%", left: "10%", animationDelay: "0s" }} />
+        <div className="fluid-blob" style={{ background: isLight ? "#EADDFF" : "#6A5ACD", width: "50vw", height: "50vh", top: "40%", left: "40%", animationDelay: "-5s" }} />
+        <div className="fluid-blob" style={{ background: isLight ? "#F5E6CC" : "#52525B", width: "35vw", height: "35vh", top: "60%", left: "10%", animationDelay: "-10s" }} />
+      </div>
 
       <AnimatePresence>
       {isAlertVisible && (
